@@ -19,42 +19,7 @@ function renderCities(){
         a.text(cityList[i]);
         $("#cityList").prepend(a);
     } 
-}
-
-// This function pulls the city list array from local storage
-function initCityList() {
-    var storedCities = JSON.parse(localStorage.getItem("cities"));
-    
-    if (storedCities !== null) {
-        cityList = storedCities;
-    }
-    
-    renderCities();
-    }
-
-// This function pull the current city into local storage to display the current weather forecast on reload
-function initWeather() {
-    var storedWeather = JSON.parse(localStorage.getItem("currentCity"));
-
-    if (storedWeather !== null) {
-        cityname = storedWeather;
-
-        displayWeather();
-        displayFiveDayForecast();
-    }
-}
-
-// This function saves the city array to local storage
-function storeCityArray() {
-    localStorage.setItem("cities", JSON.stringify(cityList));
-    }
-
-// This function saves the currently display city to local storage
-function storeCurrentCity() {
-
-    localStorage.setItem("currentCity", JSON.stringify(cityname));
-}
-      
+}   
 
 // Click event handler for city search button
 $("#citySearchBtn").on("click", function(event){
@@ -137,7 +102,7 @@ async function displayWeather() {
         $("#weatherContainer").html(currentWeatherDiv);
 }
 
-// This function runs the AJAX call for the 5 day forecast and displays them to the DOM
+// AJAX call for the 5 day forecast and displays them to the DOM
 async function displayFiveDayForecast() {
 
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?q="+cityname+"&units=imperial&appid=d3b85d453bf90d469c82e650a0a3da26";
@@ -177,7 +142,7 @@ async function displayFiveDayForecast() {
       $("#forecastContainer").html(forecastDiv);
     }
 
-// This function is used to pass the city in the history list to the displayWeather function
+// pass the city in the history list to the displayWeather function
 function historyDisplayWeather(){
     cityname = $(this).attr("data-name");
     displayWeather();
@@ -185,5 +150,39 @@ function historyDisplayWeather(){
     console.log(cityname);
     
 }
+
+// pull the current city into local storage to display the current weather forecast on reload
+function initWeather() {
+    var storedWeather = JSON.parse(localStorage.getItem("currentCity"));
+
+    if (storedWeather !== null) {
+        cityname = storedWeather;
+
+        displayWeather();
+        displayFiveDayForecast();
+    }
+}
+
+// saves the city array to local storage
+function storeCityArray() {
+    localStorage.setItem("cities", JSON.stringify(cityList));
+    }
+
+// saves the currently display city to local storage
+function storeCurrentCity() {
+
+    localStorage.setItem("currentCity", JSON.stringify(cityname));
+}
+
+// pulls the city list array from local storage
+function initCityList() {
+    var storedCities = JSON.parse(localStorage.getItem("cities"));
+    
+    if (storedCities !== null) {
+        cityList = storedCities;
+    }
+    
+    renderCities();
+    }
 
 $(document).on("click", ".city", historyDisplayWeather);
